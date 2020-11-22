@@ -1,0 +1,11 @@
+# docker-compose up -d
+version: "3"
+
+services:
+  webapp-prod:
+    container_name: webapp-prod
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    ports:
+      - "8000:80"   # - external-port:internal-port

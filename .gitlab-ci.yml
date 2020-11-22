@@ -1,0 +1,58 @@
+image:
+  name: docker/compose  # Official docker compose image.
+  entrypoint: ["/bin/sh", "-c"]
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+  - maintenance
+
+before_script:
+  - docker info
+  - docker-compose version
+  - echo $CI_COMMIT_REF_NAME
+  - echo $CI_COMMIT_BRANCH
+  - echo "<h1>Hi R-Vision Team! </h1>" > html/index.html
+  - echo "<h2>'Hello World' built from branch - $CI_COMMIT_BRANCH </h2>" >> html/index.html
+
+jobBuild:
+  stage: build
+  script:
+    - docker-compose build
+  tags:
+    - flyer8-runner
+
+jobDeploy:
+  stage: deploy
+  script:
+    - docker-compose down || true
+    - docker-compose up -d
+  tags:
+  - flyer8-runner
+
+jobStop:
+  stage: maintenance
+  script:
+    - docker-compose stop
+  tags:
+    - flyer8-runner
+  when: manual
+
+jobStart:
+  stage: maintenance
+  script:
+    - docker-compose start
+  tags:
+  - flyer8-runner
+  when: manual
+
+jobDelete:
+  stage: maintenance
+  script:
+    - docker-compose down
+  tags:
+    - flyer8-runner
+  when: manual

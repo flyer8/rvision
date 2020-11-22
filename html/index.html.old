@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Page Title</title>
+    </head>
+    <body>
+        <div id="logger" class="web_console"></div>
+
+        <script type="text/javascript">
+
+            // Overriding console object
+            let console = {};
+
+            // Getting div to insert logs
+            let logger = document.getElementById("logger");
+
+            // Adding log method from our console object
+            console.log = text =>
+            {
+                let element = document.createElement("div");
+                let txt = document.createTextNode(text);
+
+                element.appendChild(txt);
+                logger.appendChild(element);
+            }
+
+            // testing
+            console.log("Hello World from ...");
+            console.log("WOW");
+
+        </script>
+    </body>
+</html>
